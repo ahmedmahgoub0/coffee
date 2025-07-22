@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.mahgoub.caffeine.ui.screen.LastPageScreen
+import com.mahgoub.caffeine.ui.screen.SnackChoiceScreen
 import com.mahgoub.caffeine.ui.screen.home.HomeScreen
 import com.mahgoub.caffeine.ui.screen.onboarding.OnboardingScreen
 import com.mahgoub.caffeine.ui.screen.order.OrderDetailsScreen
@@ -73,16 +75,32 @@ fun CaffeineApp(modifier: Modifier = Modifier) {
                     animatedVisibilityScope = this@composable,
                     size = navStackEntry.arguments?.getString("size") ?: "",
                     selectedSize = navStackEntry.arguments?.getString("selectedSize") ?: "",
-                ){
+                ) {
                     navController.navigate(TakeAwayRoute)
                 }
             }
             composable<TakeAwayRoute> {
                 TakeAwayScreen(
                     onClickCancel = { navController.popBackStack() },
-                    navigateToOnboarding = { navController.popBackStack(OnboardingRoute, false) }
+                    navigateToOnboarding = { navController.navigate(SnackChoiceRoute) }
+                )
+            }
+            composable<SnackChoiceRoute> {
+                SnackChoiceScreen(
+                    animatedVisibilityScope = this@composable,
+                    navigateToCheckout = { navController.navigate(LastPageRoute(it)) }
+                )
+
+            }
+            composable<LastPageRoute> {
+                LastPageScreen(
+                    snackId = it.arguments?.getInt("snackId") ?: 0,
+                    navigateToOnBoarding = { navController.navigate(OnboardingRoute) },
+                    animatedVisibilityScope = this@composable
                 )
             }
         }
     }
 }
+
+// navController.popBackStack(OnboardingRoute, false)

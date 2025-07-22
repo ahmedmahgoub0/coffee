@@ -22,3 +22,10 @@ data class PreparingRoute(
 @Serializable
 object TakeAwayRoute
 
+@Serializable
+object SnackChoiceRoute
+
+@Serializable
+data class LastPageRoute(
+    val snackId: Int
+)
